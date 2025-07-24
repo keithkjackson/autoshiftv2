@@ -279,6 +279,18 @@ compliance-source-namespace<String>: default openshift-marketplace
 
 compliance-channel<String>: default stable
 
+### LVM Operator
+
+lvm<bool>: If not set the LVM Operator will not be managed. default false
+
+lvm-default<bool>: Sets the lvm-operator as the default Storage Class. default 'true'
+
+lvm-fstype<String>: Options xfs,ext4; default xfs
+
+lvm-size-percent<Int>: Percentage of the Volume Group to use for the thinpool default 90
+
+lvm-overprovision-ratio<Int>: default 10
+
 ### Local Storage Operator
 
 local-storage<bool>: if not set to true, local storage will not be managed or deployed.
@@ -319,3 +331,10 @@ odf-install-plan-approval<String>: default Automatic
 odf-source<String>: default redhat-operators
 
 odf-source-namespace<String>: default openshift-marketplace
+
+### Single Node OpenShift
+SNO clusters are generally resource constrained. An example values file is provided at `autoshift/values.hub.baremetal-sno.yaml`. This disables extra features and leverages LVM Operator for storage.
+
+sno<bool>: If set, tweaks specific to SNO will be applied. default false
+
+sno-max-pods<Int>: The number of maximum pods per node. Up to 2500 supported dependent on hardware. default 500
