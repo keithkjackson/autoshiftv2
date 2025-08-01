@@ -42,8 +42,8 @@ The hub cluster is the main cluster with RHACM with its core components installe
     $ oc login --token=sha256~lQ...dI --server=https://api.cluster.example.com:6443
     ```
 
-    > [!NOTE] 
-    > Alternatively you can use the devcontainer provided by this repository. By default the container will install the stable version of `oc` and the latest Red Hat provided version of `helm`. These versions can be specified by setting the `OCP_VERSION` and `HELM_VERSION` variables before building. From the container you can login as usual with `oc login` or copy your kubeconfig into the container `podman cp ${cluster_dir}/auth/kubeconfig ${container-name}:/workspaces/.kube/config`.
+> [!NOTE] 
+> Alternatively you can use the devcontainer provided by this repository. By default the container will install the stable version of `oc` and the latest Red Hat provided version of `helm`. These versions can be specified by setting the `OCP_VERSION` and `HELM_VERSION` variables before building. From the container you can login as usual with `oc login` or copy your kubeconfig into the container `podman cp ${cluster_dir}/auth/kubeconfig ${container-name}:/workspaces/.kube/config`.
 
 2.  If installing in a disconnected or internet-disadvantaged environment, update the values in `policies/openshift-gitops/values.yaml` and `policies/advanced-cluster-management/values.yaml` with the source mirror registry, otherwise leave these values as is.
 
@@ -57,8 +57,8 @@ The hub cluster is the main cluster with RHACM with its core components installe
     $ helm upgrade --install openshift-gitops openshift-gitops -f policies/openshift-gitops/values.yaml
     ```
 
-    > [!NOTE]  
-    > If OpenShift GitOps is already installed manually on cluster and the default argo instance exists this step can be skipped. Make sure that argocd controller has cluster-admin
+> [!NOTE]  
+> If OpenShift GitOps is already installed manually on cluster and the default argo instance exists this step can be skipped. Make sure that argocd controller has cluster-admin
 
 2.  After the installation is complete, verify that all the pods in the `openshift-gitops` namespace are running. This can take a few minutes depending on your network to even return anything.
 
@@ -126,8 +126,8 @@ The hub cluster is the main cluster with RHACM with its core components installe
     open-cluster-management   multiclusterhub   Installing   5m51s                    2.13.2
     open-cluster-management   multiclusterhub   Running      6m28s   2.13.2           2.13.2
     ```
-    > [!NOTE]  
-    > This does take roughly 10 min to install. You can proceed to installing AutoShift while this is installing but you will not be able to verify AutoShift or select a `clusterset` until this is finished.
+> [!NOTE]  
+> This does take roughly 10 min to install. You can proceed to installing AutoShift while this is installing but you will not be able to verify AutoShift or select a `clusterset` until this is finished.
 
 ### Install AutoShiftv2
 
