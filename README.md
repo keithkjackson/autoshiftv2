@@ -39,7 +39,7 @@ The hub cluster is the main cluster with RHACM with its core components installe
 1.  Login to the **hub** cluster via the [`oc` utility](https://docs.redhat.com/en/documentation/openshift_container_platform/latest/html/cli_tools/openshift-cli-oc#cli-logging-in_cli-developer-commands).
 
     ```console
-    $ oc login --token=sha256~lQ...dI --server=https://api.cluster.example.com:6443
+    oc login --token=sha256~lQ...dI --server=https://api.cluster.example.com:6443
     ```
 
 > [!NOTE] 
@@ -54,7 +54,7 @@ The hub cluster is the main cluster with RHACM with its core components installe
 1.  Using helm, install OpenShift GitOps
 
     ```console
-    $ helm upgrade --install openshift-gitops openshift-gitops -f policies/openshift-gitops/values.yaml
+    helm upgrade --install openshift-gitops openshift-gitops -f policies/openshift-gitops/values.yaml
     ```
 
 > [!NOTE]  
@@ -63,7 +63,12 @@ The hub cluster is the main cluster with RHACM with its core components installe
 2.  After the installation is complete, verify that all the pods in the `openshift-gitops` namespace are running. This can take a few minutes depending on your network to even return anything.
 
     ```console
-    $ oc get pods -n openshift-gitops
+    oc get pods -n openshift-gitops
+    ```
+
+    This command should return something like this:
+
+    ```console
     NAME                                                      	      READY   STATUS    RESTARTS   AGE
     cluster-b5798d6f9-zr576                                   	      1/1 	  Running   0          65m
     kam-69866d7c48-8nsjv                                      	      1/1 	  Running   0          65m
@@ -78,7 +83,12 @@ The hub cluster is the main cluster with RHACM with its core components installe
 3.  Verify that the pod/s in the `openshift-gitops-operator` namespace are running.
 
     ```console
-    $ oc get pods -n openshift-gitops-operator
+    oc get pods -n openshift-gitops-operator
+    ```
+    
+    This command should return something like this:
+
+    ```
     NAME                                                            READY   STATUS    RESTARTS   AGE
     openshift-gitops-operator-controller-manager-664966d547-vr4vb   2/2     Running   0          65m
     ```
@@ -114,7 +124,7 @@ The hub cluster is the main cluster with RHACM with its core components installe
 
     This command should return something like this:
 
-    ```
+    ```console
     NAMESPACE                 NAME              STATUS       AGE     CURRENTVERSION   DESIREDVERSION
     open-cluster-management   multiclusterhub   Installing   2m35s                    2.13.2
     open-cluster-management   multiclusterhub   Installing   2m39s                    2.13.2
@@ -138,7 +148,7 @@ The hub cluster is the main cluster with RHACM with its core components installe
 
 2.  Using helm and the values you set for cluster labels, install autoshift. Here is an example using the extant hub values file:
 
-    ```
+    ```console
     helm template autoshift autoshift -f autoshift/values.hub.yaml | oc apply -f -
     ```
 
@@ -329,19 +339,7 @@ Values can be set on a per cluster and clusterset level to decide what features 
 | `lvm-default`                         | bool              | `true`                    | Sets the lvm-operator as the default Storage Class |
 | `lvm-fstype`                          | String            | `xfs`                     | Options `xfs` `ext4` |
 | `lvm-size-percent`                    | Int               | `90`                      | Percentage of the Volume Group to use for the thinpool |
-| `lvm-overprovision-ratio              | Int               | `10`                      |       |
-
-### LVM Operator
-
-lvm<bool>: If not set the LVM Operator will not be managed. default false
-
-lvm-default<bool>: Sets the lvm-operator as the default Storage Class. default 'true'
-
-lvm-fstype<String>: Options xfs,ext4; default xfs
-
-lvm-size-percent<Int>: Percentage of the Volume Group to use for the thinpool default 90
-
-lvm-overprovision-ratio<Int>: default 10
+| `lvm-overprovision-ratio`             | Int               | `10`                      |       |
 
 ### Local Storage Operator
 
