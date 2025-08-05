@@ -370,6 +370,19 @@ Values can be set on a per cluster and clusterset level to decide what features 
 | `odf-source`                      | String            | `redhat-operators`        |       |
 | `odf-source-namespace`            | String            | `openshift-marketplace`   |       |
 
+### Kubernetes NMState Operator
+
+The Kubernetes NMState Operator can be used to declaratively configure the Red Hat Core OS network settings. Common uses are adding bonds, vlans, and bridges. This helm chart works with AutoShift v2. This helm chart ingests every file in `policies/nmstate/files/` (with the exception of any file ending with the extension `.example`) and applies them as a ConfigMap on the hub cluster. Cluster labels are used to choose which cluster gets a configuration. If you want a cluster to have a config applied to it, you must label it with a label that starts with `autoshift.io/nmstate-nncp-` and has a value of the name of the file. For example the configuration file `example-1g-bond.yaml` can be applied to a cluster by applying label: `nmstate-nncp-example-bond1: example-1g-bond`. To further select specific nodes within a cluster, nodeSelectors can be used. To get started you can copy an example file such as `policies/nmstate/files/bond.yaml.example` and change the `nmstate:` configuration as required. The NMState YAML API is well documented at: [nmstate | A Declarative API for Host Network Management](https://nmstate.io/devel/yaml_api.html).
+
+| Variable                        | Type           | Default Value         | Notes                                                                             |
+| ------------------------------- | -------------- | --------------------- | --------------------------------------------------------------------------------- |
+| `nmsate`                        | bool           | false                 | If not set the Kubernetes NMState Operator will not be managed                    |
+| `nmstate-nncp`                  | <list<string>> | omitted               | Filename of NMState config that exists in files. Can be specified multiple times. |
+| `nmstate-channel`               | string         | stable                |                                                                                   |
+| `nmstate-install-plan-approval` | string         | Automatic             |                                                                                   |
+| `nmstate-source`                | string         | redhat-operators      |                                                                                   |
+| `nmstate-source-namespace`      | string         | openshift-marketplace |                                                                                   |
+
 ### Single Node OpenShift
 
 SNO clusters are generally resource constrained. An example values file is provided at `autoshift/values.hub.baremetal-sno.yaml`. This disables extra features and leverages LVM Operator for storage.
