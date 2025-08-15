@@ -24,6 +24,24 @@ hubClusterSets:
       acm-source: redhat-operators
       acm-source-namespace: openshift-marketplace
       acm-availability-config: 'High'
+      ### MetalLB
+      metallb: 'true'
+      metallb-source: redhat-operators
+      metallb-source-namespace: openshift-marketplace
+      metallb-install-plan-approval: Automatic
+      metallb-channel: stable
+      metallb-quota: 'false'
+      # Set your quota if metallb-quota is enabled
+      metallb-quota-cpu: ''
+      metallb-quota-memory:
+      # Specify the names of your IPPool files here
+      metallb-ippool-1: ''
+      #Specify your L2 Advertisement files here
+      metallb-l2-1: ''
+      # Specify the names of your BGP Advertisement files here
+      metallb-bgp-1: ''
+      # Specify the names of your Peer files here
+      metallb-peer-1: ''
       ### Infrastructure Nodes
       infra-nodes: ''
       infra-nodes-numcpu: ''
@@ -123,7 +141,7 @@ hubClusterSets:
       ### Developer OpenShift Gitops
       gitops-dev: 'true'
       ### Loki
-      loki: 'true' 
+      loki: 'true'
       loki-channel: stable-6.2
       loki-install-plan-approval: Automatic
       loki-source: redhat-operators
@@ -233,7 +251,7 @@ managedClusterSets:
       gitops-dev: 'true'
       gitops-dev-team-dev: 'true'
       ### Loki
-      loki: 'true' 
+      loki: 'true'
       loki-channel: stable-6.2
       loki-install-plan-approval: Automatic
       loki-source: redhat-operators
