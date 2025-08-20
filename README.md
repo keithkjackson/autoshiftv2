@@ -146,13 +146,45 @@ The hub cluster is the main cluster with RHACM with its core components installe
 
 1.  Update `autoshift/values.yaml` with desired feature flags and repo url as define in [Autoshift Cluster Labels Values Reference](#Autoshift-Cluster-Labels-Values-Reference)
 
-2.  Using helm and the values you set for cluster labels, install autoshift. Here is an example using the extant hub values file:
+2.  Using helm and the values you set for cluster labels, install autoshift. Here is an example using the hub values file:
 
     ```console
-    helm template autoshift autoshift -f autoshift/values.hub.yaml | oc apply -f -
+    export APP_NAME="autoshift"
+    export REPO_URL="https://github.com/auto-shift/autoshiftv2.git"
+    export TARGET_REVISION="main"
+    export VALUES_FILE="values.hub.yaml"
+    export ARGO_PROJECT="default"
+    export GITOPS_NAMESPACE="openshift-gitops"
+    cat << EOF | oc apply -f -
+    apiVersion: argoproj.io/v1alpha1
+    kind: Application
+    metadata:
+      name: $APP_NAME
+      namespace: $GITOPS_NAMESPACE
+    spec:
+      destination:
+        namespace: ''
+        server: https://kubernetes.default.svc
+      source:
+        path: autoshift
+        repoURL: $REPO_URL
+        targetRevision: $TARGET_REVISION
+        helm:
+          valueFiles:
+            - $VALUES_FILE
+          values: |-
+            autoshiftGitRepo: $REPO_URL
+            autoshiftGitBranchTag: $TARGET_REVISION
+      sources: []
+      project: $ARGO_PROJECT
+      syncPolicy:
+        automated:
+          prune: false
+          selfHeal: true
+    EOF
     ```
 
-3.  Given the labels and cluster sets specified in the suplied values file, ACM cluster sets will be created. To view the cluster sets, In the OpenShift web console go to **All Clusters > Infrastructure > Clusters > Cluster Sets** in the ACM Console
+3.  Given the labels and cluster sets specified in the supplied values file, ACM cluster sets will be created. To view the cluster sets, In the OpenShift web console go to **All Clusters > Infrastructure > Clusters > Cluster Sets** in the ACM Console
 
     ![Cluster Sets in ACM Console](images/acm-cluster-sets.png)
 
@@ -400,6 +432,19 @@ Single Node OpenShift clusters as well as Compact Clusters have to rely on their
 | `odf-install-plan-approval`       | String            | `Automatic`               |       |
 | `odf-source`                      | String            | `redhat-operators`        |       |
 | `odf-source-namespace`            | String            | `openshift-marketplace`   |       |
+
+### OpenShift Internal Registry
+| Variable                          | Type              | Default Value             | Notes |
+|-----------------------------------|-------------------|---------------------------|-------|
+| `imageregistry`                   | Bool              | `false`                   | If not set OpenShift Internal Image Registry will not be managed. |
+| `imageregistry-management-state`  | String            | `Managed`                 |  can be set to `Managed` and `Unmanaged`, though only `Managed` is supported |
+| `imageregistry-replicas`          | Integer           |                           | Need at least `2`, as well as read write many storage or object/s3 storage in order support HA and Rolling Updates |
+| `imageregistry-storage-type`      | String            |                           | Supported `s3` or `pvc`, s3 only supports Nooban|
+| `imageregistry-s3-region`         | String            |                           |  if type is `s3` you can specify a region |
+| `imageregistry-pvc-access-mode`   | String            |                           | Example `ReadWriteMany`  |
+| `imageregistry-pvc-storage-class` | String            |                           | Example `ocs-storagecluster-ceph-rbd` |
+| `imageregistry-pvc-volume-mode`   | String            |                           | Example `Block` or `FileSystem` |
+| `imageregistry-rollout-strategy`  | String            | `RollingUpdate`           | Example `RollingUpdate` if at least 2 or `Recreate` if only 1 |
 
 ### Kubernetes NMState Operator
 
