@@ -99,7 +99,7 @@ hubClusterSets:
       odf-ocs-storage-class-name: 'gp3-csi'
       odf-ocs-storage-size: '2Ti'
       odf-ocs-storage-count: '2'
-      odf-ocs-storage-replicas: '3'
+      odf-ocs-storage-replicas: '4'
       odf-resource-profile: balanced
       odf-channel: stable-4.18
       odf-install-plan-approval: Automatic
@@ -313,4 +313,5 @@ managedClusterSets:
 #       worker-nodes-memory-mib:  '32768'
 #       worker-nodes-numcores-per-socket:  '4'
 #       worker-nodes:  '3'
+
 
