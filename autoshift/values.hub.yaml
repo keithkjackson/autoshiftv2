@@ -41,7 +41,7 @@ hubClusterSets:
       # acm-provisioning-filesystem-storage-size: 100Gi
       # acm-provisioning-image-storage-size: 50Gi
       ### MetalLB
-      metallb: 'true'
+      metallb: 'false'
       metallb-subscription-name: metallb-operator
       # metallb-version: 'metallb-operator.v4.18.0-202509240837'
       metallb-source: redhat-operators
@@ -96,14 +96,14 @@ hubClusterSets:
       lvm-source: redhat-operators
       lvm-source-namespace: openshift-marketplace
       ### Local Storage Operator
-      local-storage: 'false'
+      local-storage: 'true'
       local-storage-subscription-name: local-storage-operator
       # local-storage-version: 'local-storage-operator.v4.18.0-202410091522'
       local-storage-channel: stable
       local-storage-source: redhat-operators
       local-storage-source-namespace: openshift-marketplace
       ### OpenShift Data Foundation
-      odf: 'true'
+      odf: 'false'
       odf-subscription-name: odf-operator
       # odf-version: 'odf-operator.v4.18.11-rhodf'
       odf-multi-cloud-gateway: standard
@@ -138,7 +138,7 @@ hubClusterSets:
       # nmstate-nncp-example-bond1: example-bond
       # nmstate-nncp-example-vlan10: example-vlan10
       ### Advanced Cluster Security
-      acs: 'true'
+      acs: 'false'
       acs-subscription-name: rhacs-operator
       # acs-version: 'rhacs-operator.v4.6.1'
       acs-egress-connectivity: Online
@@ -146,14 +146,14 @@ hubClusterSets:
       acs-source: redhat-operators
       acs-source-namespace: openshift-marketplace
       ### Developer Spaces
-      dev-spaces: 'true'
+      dev-spaces: 'false'
       dev-spaces-subscription-name: devspaces
       # dev-spaces-version: 'devspaces.v3.21.0'
       dev-spaces-channel: stable
       dev-spaces-source: redhat-operators
       dev-spaces-source-namespace: openshift-marketplace
       ### Developer Hub
-      dev-hub: 'true'
+      dev-hub: 'false'
       dev-hub-subscription-name: rhdh
       # dev-hub-version: 'rhdh.v1.5.0'
       dev-hub-channel: fast
@@ -167,25 +167,25 @@ hubClusterSets:
       pipelines-source: redhat-operators
       pipelines-source-namespace: openshift-marketplace
       ### Trusted Artifact Signer
-      tas: 'true'
+      tas: 'false'
       tas-subscription-name: rhtas-operator
       # tas-version: 'rhtas-operator.v1.2.0'
       tas-channel:  stable
       tas-source: redhat-operators
       tas-source-namespace: openshift-marketplace
       ### Quay
-      quay: 'true'
+      quay: 'false'
       quay-subscription-name: quay-operator
       # quay-version: 'quay-operator.v3.15.0'
       quay-channel: stable-3.15
       quay-source: redhat-operators
       quay-source-namespace: openshift-marketplace
       ### Developer OpenShift Gitops
-      gitops-dev: 'true'
+      gitops-dev: 'false'
       gitops-dev-team-test: 'hub' #hub or standalone
       # gitops-dev-team-{INSERT_TEAM_NAME}
       ### Loki
-      loki: 'true'
+      loki: 'false'
       loki-subscription-name: loki-operator
       # loki-version: 'loki-operator.v6.3.0'
       loki-channel: stable-6.3
@@ -195,21 +195,21 @@ hubClusterSets:
       loki-storageclass: gp3-csi
       loki-lokistack-name: logging-lokistack
       ### OpenShift Logging
-      logging: 'true'
+      logging: 'false'
       logging-subscription-name: cluster-logging
       # logging-version: 'cluster-logging.v6.3.0'
       logging-channel: stable-6.3
       logging-source: redhat-operators
       logging-source-namespace: openshift-marketplace
       ### Cluster Observability Operator
-      coo: 'true'
+      coo: 'false'
       coo-subscription-name: cluster-observability-operator
       # coo-version: 'cluster-observability-operator.v0.4.0'
       coo-channel: stable
       coo-source: redhat-operators
       coo-source-namespace: openshift-marketplace
       ### Compliance Operator Stig Apply
-      compliance: 'true'
+      compliance: 'false'
       compliance-subscription-name: compliance-operator
       # compliance-version: 'compliance-operator.v1.8.0'
       compliance-name: compliance-operator
@@ -348,3 +348,4 @@ managedClusterSets:
 #       worker-nodes-memory-mib:  '32768'
 #       worker-nodes-numcores-per-socket:  '4'
 #       worker-nodes:  '3'
+
