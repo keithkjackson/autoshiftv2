@@ -3,7 +3,7 @@
 # Declare variables to be passed into your templates.
 
 autoshiftGitRepo: https://github.com/auto-shift/autoshiftv2.git
-autoshiftGitBranchTag: main
+autoshiftGitBranchTag: quaypull
 
 selfManagedHubSet: hub
 
@@ -348,4 +348,5 @@ managedClusterSets:
 #       worker-nodes-memory-mib:  '32768'
 #       worker-nodes-numcores-per-socket:  '4'
 #       worker-nodes:  '3'
+
 
