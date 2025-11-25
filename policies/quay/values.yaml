@@ -19,19 +19,10 @@ quay:
     registry_components:
       - kind: clair
         managed: true
-        postgres:
-          storageClassName: gp3-csi
-          volumeSize: 20Gi
       - kind: postgres
         managed: true
-        postgres:
-          storageClassName: gp3-csi
-          volumeSize: 20Gi
       - kind: objectstorage
         managed: true
-        objectStorage:
-          storageClassName: gp3-csi
-          volumeSize: 50Gi
       - kind: redis
         managed: true
       - kind: horizontalpodautoscaler
