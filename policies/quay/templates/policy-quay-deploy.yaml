@@ -15,11 +15,6 @@ spec:
     kind: Policy
     name: policy-quay-operator-install
     namespace: {{ .Values.policy_namespace }}
-  - apiVersion: policy.open-cluster-management.io/v1
-    compliance: Compliant
-    kind: Policy
-    name: policy-storage-cluster
-    namespace: {{ .Values.policy_namespace }}
   policy-templates:
     - objectDefinition:
         apiVersion: policy.open-cluster-management.io/v1
