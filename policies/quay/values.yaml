@@ -19,10 +19,19 @@ quay:
     registry_components:
       - kind: clair
         managed: true
+        database:
+          storageClassName: test
+          volumeSize: 20Gi
       - kind: postgres
         managed: true
+        database:
+          storageClassName: test
+          volumeSize: 20Gi
       - kind: objectstorage
         managed: true
+        objectStorage:
+          storageClassName: test
+          volumeSize: 50Gi
       - kind: redis
         managed: true
       - kind: horizontalpodautoscaler
