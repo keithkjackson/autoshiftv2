@@ -93,7 +93,7 @@ spec:
                       openShiftOAuth: true
                     provider: dex
                   rbac:
-                    defaultPolicy: ''
+                    defaultPolicy: 'role:admin'
                     policy: |
                       g, system:cluster-admins, role:admin
                     {{- range .Values.gitops.rbac_policies}}
