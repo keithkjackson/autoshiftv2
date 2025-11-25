@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-autoshiftGitRepo: https://github.com/auto-shift/autoshiftv2.git
+autoshiftGitRepo: https://github.com/keithkjackson/autoshiftv2.git
 autoshiftGitBranchTag: quaypull
 
 selfManagedHubSet: hub
@@ -160,7 +160,7 @@ hubClusterSets:
       dev-hub-source: redhat-operators
       dev-hub-source-namespace: openshift-marketplace
       ### OpenShift Pipelines
-      pipelines: 'true'
+      pipelines: 'false'
       pipelines-subscription-name: openshift-pipelines-operator-rh
       # pipelines-version: 'openshift-pipelines-operator-rh.v1.18.1'
       pipelines-channel: latest
@@ -217,7 +217,7 @@ hubClusterSets:
       compliance-source-namespace: openshift-marketplace
       compliance-channel: stable
       ### OpenShift Virtualization
-      virt: false
+      virt: 'false'
       virt-channel: stable
       virt-source: redhat-operators
       virt-source-namespace: openshift-marketplace
@@ -246,7 +246,7 @@ managedClusterSets:
       storage-nodes-numcores-per-socket: ''
       storage-nodes-zones: ''
       ### Local Storage Operator
-      local-storage: 'false'
+      local-storage: 'true'
       local-storage-subscription-name: local-storage-operator
       # local-storage-version: 'local-storage-operator.v4.18.0-202410091522'
       local-storage-channel: stable
