@@ -19,12 +19,12 @@ quay:
     registry_components:
       - kind: clair
         managed: true
-        database:
+        postgres:
           storageClassName: gp3-csi
           volumeSize: 20Gi
       - kind: postgres
         managed: true
-        database:
+        postgres:
           storageClassName: gp3-csi
           volumeSize: 20Gi
       - kind: objectstorage
@@ -48,6 +48,7 @@ quay:
         managed: true
       - kind: clairpostgres
         managed: true
+
 
 # hubClusterSets:
 #   hub:
