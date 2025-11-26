@@ -174,7 +174,7 @@ hubClusterSets:
       tas-source: redhat-operators
       tas-source-namespace: openshift-marketplace
       ### Quay
-      quay: 'true'
+      quay: 'false'
       quay-subscription-name: quay-operator
       # quay-version: 'quay-operator.v3.15.0'
       quay-channel: stable-3.15
