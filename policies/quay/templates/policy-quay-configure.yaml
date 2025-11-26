@@ -153,6 +153,7 @@ spec:
                           CURL_OPTS="-fsk"
                           QUAY_ADMIN=quayadmin
                           QUAY_USER=quaydevel
+                          QUAY_ROBOT=quaydroid
                           QUAY_USER_SECRET=$QUAY_USER
                           QUAY_NAMESPACE={{ .Values.quay.enterpriseNamespace }}
                           QUAY_HOST=$(oc get route -n $QUAY_NAMESPACE registry-quay -o jsonpath='{.spec.host}')
@@ -237,8 +238,43 @@ spec:
                           COUNT=$(quay_cmd Bearer GET /api/v1/repository/$QUAY_ORG/$QUAY_REPO/permissions/user/$QUAY_USER | grep '"role": "admin"' | wc -l)
                           if [ $COUNT = 0 ]; then
                             echo "[INFO] Give $QUAY_USER admin rights to the repo ..."
-                            quay_cmd Bearer PUT /api/v1/repository/$QUAY_ORG/$QUAY_REPO/permissions/user/$QUAY_USER '{ "role": "admin"}'
+                            quay_cmd Bearer PUT /api/v1/repository/$QUAY_ORG/$QUAY_REPO/permissions/user/$QUAY_USER '{ "role": "read"}'
                           fi
+
+                          echo "[INFO] Creating robot account for $QUAY_ORG ..."
+                          quay_cmd Bearer PUT /api/v1/organization/$QUAY_ORG/robots/$QUAY_ROBOT
+
+                          echo "[INFO] Give $QUAY_ROBOT read rights to repo"
+                          quay_cmd Bearer PUT /api/v1/repository/$QUAY_ORG/$QUAY_REPO/permissions/user/$QUAY_ROBOT '{ "role": "admin"}'
+
+                          echo "[INFO] Parse robot token for pull secret ..."
+                          ROBOT_TOKEN=$(quay_cmd Bearer POST /api/v1/$QUAY_ORG/robots/$QUAY_ROBOT/regenerate | jq -r '.token')
+
+                          echo "[INFO] Assemble Robot Credential for Pull secret ..."
+                          ROBOT_USER="$QUAY_ORG+$QUAY_ROBOT"
+                          ROBOT_CRED="$ROBOT_USER:$ROBOT_TOKEN"
+                          
+                          # Encode with base64
+                          BASE64AUTH=`echo -n $ROBOT_CRED | base64 -w0`
+
+                          echo "[INFO] Updating global pull secret with robot credentials ..."
+                          PULL_SECRET_FILE="pull-secret-merged.json"
+
+                          # Creating new pull secret to use for merge 
+                          jq -n --arg host "$QUAY_HOST" --arg auth "$BASE64AUTH" --arg email "$QUAY_ROBOT@email.com" '{"auths": { ($host): {"auth": $auth, "email": $email} } }' > temp-quay-auth.json
+                          
+                          # Download global pull secret
+                          oc get secret pull-secret -n openshift-config -o jsonpath='{.data.\.dockerconfigjson}' | base64 -d > global-pull-secret.json
+
+                          # Merge the two secrets together
+                          jq -s '.[0] * .[1]' global-pull-secret.json temp-quay-auth.json > "${PULL_SECRET_FILE}"
+
+                          # Apply the new pull secret to the cluster
+                          oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson="${PULL_SECRET_FILE}"
+                         
+                          
+
+
 
                           echo "[INFO] Job finished"
                         image: {{ .Values.quay.cliImage }}
