@@ -248,6 +248,9 @@ spec:
                           ROBOT_USER="$QUAY_ORG+$QUAY_ROBOT"
                           quay_cmd Bearer PUT /api/v1/repository/$QUAY_ORG/$QUAY_REPO/permissions/user/$ROBOT_USER '{ "role": "admin"}'
 
+                          echp "[INFO]" Debugging by Keith - Sleep for 10 minutes
+                          sleep 20m
+
                           echo "[INFO] Parse robot token for pull secret ..."
                           ROBOT_TOKEN=$(quay_cmd Bearer POST /api/v1/$QUAY_ORG/robots/$QUAY_ROBOT/regenerate | jq -r '.token')
 
