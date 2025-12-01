@@ -245,7 +245,8 @@ spec:
                           quay_cmd Bearer PUT /api/v1/organization/$QUAY_ORG/robots/$QUAY_ROBOT
 
                           echo "[INFO] Give $QUAY_ROBOT read rights to repo"
-                          quay_cmd Bearer PUT /api/v1/repository/$QUAY_ORG/$QUAY_REPO/permissions/user/$QUAY_ROBOT '{ "role": "admin"}'
+                          ROBOT_USER="$QUAY_ORG+$QUAY_ROBOT"
+                          quay_cmd Bearer PUT /api/v1/repository/$QUAY_ORG/$QUAY_REPO/permissions/user/$ROBOT_USER '{ "role": "admin"}'
 
                           echo "[INFO] Parse robot token for pull secret ..."
                           ROBOT_TOKEN=$(quay_cmd Bearer POST /api/v1/$QUAY_ORG/robots/$QUAY_ROBOT/regenerate | jq -r '.token')
