@@ -246,7 +246,7 @@ spec:
 
                           echo "[INFO] Give $QUAY_ROBOT read rights to repo"
                           ROBOT_USER="$QUAY_ORG+$QUAY_ROBOT"
-                          quay_cmd Bearer PUT /api/v1/repository/$QUAY_ORG/$QUAY_REPO/permissions/user/$ROBOT_USER '{ "role": "admin"}'
+                          quay_cmd Bearer PUT /api/v1/repository/$QUAY_ORG/$QUAY_REPO/permissions/user/$ROBOT_USER '{ "role": "read"}'
 
                           echp "[INFO]" Debugging by Keith - Sleep for 10 minutes
                           sleep 20m
