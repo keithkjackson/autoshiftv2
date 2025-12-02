@@ -4,7 +4,7 @@
 policy_namespace: policies-autoshift
 quay:
     name: quay-operator
-    cliImage: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
+    cliImage: image-registry.openshift-image-registry.svc:5000/openshift/tools:latest
     namespace: quay-operator
     channel: stable-3.13
     source: redhat-operators
