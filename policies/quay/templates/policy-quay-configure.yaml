@@ -69,6 +69,25 @@ spec:
             - complianceType: musthave
               objectDefinition:
                 apiVersion: rbac.authorization.k8s.io/v1
+                kind: Role
+                metadata:
+                  name: create-admin-user-global
+                  namespace: openshift-config
+                rules:
+                - apiGroups:
+                  - ""
+                  resources:
+                  - secrets
+                  verbs:
+                  - get
+                  - create
+                  - delete
+                  - update
+                  resourceNames:
+                  - pull-secret
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
                 kind: RoleBinding
                 metadata:
                   name: create-admin-user
@@ -77,6 +96,21 @@ spec:
                   apiGroup: rbac.authorization.k8s.io
                   kind: Role
                   name: create-admin-user
+                subjects:
+                - kind: ServiceAccount
+                  name: create-admin-user
+                  namespace: {{ .Values.quay.enterpriseNamespace }}
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: rbac.authorization.k8s.io/v1
+                kind: RoleBinding
+                metadata:
+                  name: create-admin-user-global
+                  namespace: openshift-config
+                roleRef:
+                  apiGroup: rbac.authorization.k8s.io
+                  kind: Role
+                  name: create-admin-user-global
                 subjects:
                 - kind: ServiceAccount
                   name: create-admin-user
@@ -265,16 +299,19 @@ spec:
                           PULL_SECRET_FILE="pull-secret-merged.json"
 
                           # Creating new pull secret to use for merge 
-                          jq -n --arg host "$QUAY_HOST" --arg auth "$BASE64AUTH" --arg email "$QUAY_ROBOT@email.com" '{"auths": { ($host): {"auth": $auth, "email": $email} } }' > temp-quay-auth.json
+                          TEMP_AUTH=$(jq -n --arg host "$QUAY_HOST" --arg auth "$BASE64AUTH" --arg email "$QUAY_ROBOT@email.com" '{"auths": { ($host): {"auth": $auth, "email": $email} } }')
                           
                           # Download global pull secret
-                          oc get secret pull-secret -n openshift-config -o jsonpath='{.data.\.dockerconfigjson}' | base64 -d > global-pull-secret.json
+                          GLOBAL_SECRET=$(oc get secret pull-secret -n openshift-config -o jsonpath='{.data.\.dockerconfigjson}' | base64 -d)
 
                           # Merge the two secrets together
-                          jq -s '.[0] * .[1]' global-pull-secret.json temp-quay-auth.json > "${PULL_SECRET_FILE}"
+                          PULL_SECRET=$(echo "${GLOBAL_SECRET}" | jq --argjson new_secret "${TEMP_AUTH}" '.auths += $new_secret.auths')
+
+                          # Finalize for update (Getting error with base64 encoding so using raw json instead)
+                          # FINAL_MERGE_SECRET=`echo -n $PULL_SECRET | base64 -w0`
 
                           # Apply the new pull secret to the cluster
-                          oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson="${PULL_SECRET_FILE}"
+                          oc set data secret/pull-secret -n openshift-config --from-literal=.dockerconfigjson="${PULL_SECRET}"
                          
                           
 
