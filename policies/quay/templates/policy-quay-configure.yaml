@@ -293,7 +293,7 @@ spec:
                           ROBOT_USER="$QUAY_ORG+$QUAY_ROBOT"
                           ROBOT_CRED="$ROBOT_USER:$ROBOT_TOKEN"
                           
-                          echo  "[INFO] Encode with base64 ...""
+                          echo  "[INFO] Encode with base64 ..."
                           BASE64AUTH=`echo -n $ROBOT_CRED | base64 -w0`
 
                           echo "[INFO] Updating global pull secret with robot credentials ..."
