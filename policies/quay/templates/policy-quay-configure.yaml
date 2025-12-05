@@ -78,13 +78,14 @@ spec:
                   - ""
                   resources:
                   - secrets
+                  resourceNames:
+                  - pull-secret
                   verbs:
                   - get
                   - create
                   - delete
                   - update
-                  resourceNames:
-                  - pull-secret
+                  - patch
             - complianceType: musthave
               objectDefinition:
                 apiVersion: rbac.authorization.k8s.io/v1
@@ -282,8 +283,8 @@ spec:
                           ROBOT_USER="$QUAY_ORG+$QUAY_ROBOT"
                           quay_cmd Bearer PUT /api/v1/repository/$QUAY_ORG/$QUAY_REPO/permissions/user/$ROBOT_USER '{ "role": "read"}'
 
-                          echp "[INFO]" Debugging by Keith - Sleep for 10 minutes
-                          sleep 20m
+                          #echo "[INFO]" Debugging by Keith - Sleep for 10 minutes
+                          #sleep 20m
 
                           echo "[INFO] Parse robot token for pull secret ..."
                           ROBOT_TOKEN=$(quay_cmd Bearer POST /api/v1/$QUAY_ORG/robots/$QUAY_ROBOT/regenerate | jq -r '.token')
@@ -292,25 +293,25 @@ spec:
                           ROBOT_USER="$QUAY_ORG+$QUAY_ROBOT"
                           ROBOT_CRED="$ROBOT_USER:$ROBOT_TOKEN"
                           
-                          # Encode with base64
+                          echo  "[INFO] Encode with base64 ...""
                           BASE64AUTH=`echo -n $ROBOT_CRED | base64 -w0`
 
                           echo "[INFO] Updating global pull secret with robot credentials ..."
                           PULL_SECRET_FILE="pull-secret-merged.json"
 
-                          # Creating new pull secret to use for merge 
+                          echo "[INFO] Creating new pull secret to use for merge ..." 
                           TEMP_AUTH=$(jq -n --arg host "$QUAY_HOST" --arg auth "$BASE64AUTH" --arg email "$QUAY_ROBOT@email.com" '{"auths": { ($host): {"auth": $auth, "email": $email} } }')
                           
-                          # Download global pull secret
+                          echo "[INFO] Download global pull secret ..."
                           GLOBAL_SECRET=$(oc get secret pull-secret -n openshift-config -o jsonpath='{.data.\.dockerconfigjson}' | base64 -d)
 
-                          # Merge the two secrets together
+                          echo "[INFO] Merge the two secrets together ..."
                           PULL_SECRET=$(echo "${GLOBAL_SECRET}" | jq --argjson new_secret "${TEMP_AUTH}" '.auths += $new_secret.auths')
 
                           # Finalize for update (Getting error with base64 encoding so using raw json instead)
                           # FINAL_MERGE_SECRET=`echo -n $PULL_SECRET | base64 -w0`
 
-                          # Apply the new pull secret to the cluster
+                          echo "[INFO] Apply the new pull secret to the cluster ..."
                           oc set data secret/pull-secret -n openshift-config --from-literal=.dockerconfigjson="${PULL_SECRET}"
                          
                           
