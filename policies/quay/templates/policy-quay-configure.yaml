@@ -297,7 +297,6 @@ spec:
                           BASE64AUTH=`echo -n $ROBOT_CRED | base64 -w0`
 
                           echo "[INFO] Updating global pull secret with robot credentials ..."
-                          PULL_SECRET_FILE="pull-secret-merged.json"
 
                           echo "[INFO] Creating new pull secret to use for merge ..." 
                           TEMP_AUTH=$(jq -n --arg host "$QUAY_HOST" --arg auth "$BASE64AUTH" --arg email "$QUAY_ROBOT@email.com" '{"auths": { ($host): {"auth": $auth, "email": $email} } }')
@@ -314,7 +313,8 @@ spec:
                           echo "[INFO] Apply the new pull secret to the cluster ..."
                           oc set data secret/pull-secret -n openshift-config --from-literal=.dockerconfigjson="${PULL_SECRET}"
                          
-                          
+                          echo "[INFO]" Debugging by Keith - Sleep for 20 minutes
+                          #sleep 20m
 
 
 
