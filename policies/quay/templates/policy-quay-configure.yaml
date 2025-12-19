@@ -287,7 +287,7 @@ spec:
                           #sleep 20m
 
                           echo "[INFO] Parse robot token for pull secret ..."
-                          ROBOT_TOKEN=$(quay_cmd Bearer POST /api/v1/$QUAY_ORG/robots/$QUAY_ROBOT/regenerate | jq -r '.token')
+                          ROBOT_TOKEN=$(quay_cmd Bearer POST /api/v1/organization/$QUAY_ORG/robots/$QUAY_ROBOT/regenerate | jq -r '.token')
 
                           echo "[INFO] Assemble Robot Credential for Pull secret ..."
                           ROBOT_USER="$QUAY_ORG+$QUAY_ROBOT"
